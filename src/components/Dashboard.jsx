@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       <div className="bg-white rounded-3xl shadow-lg w-full max-w-md p-6">
@@ -29,7 +32,10 @@ const Dashboard = () => {
 
         {/* Buttons */}
         <div className="flex space-x-3 mb-4">
-          <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-medium">
+          <button
+            className="flex-1 bg-blue-600 hover:bg-blue-700 py-2 rounded-lg text-sm font-medium text-white"
+            onClick={() => navigate('/log')}
+          >
             + Log Reading
           </button>
           <button className="flex-1 border border-gray-300 hover:bg-gray-100 text-gray-800 py-2 rounded-lg text-sm font-medium">
