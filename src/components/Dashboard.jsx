@@ -30,7 +30,7 @@ const Dashboard = () => {
         <section className="bg-gray-50 border rounded-xl shadow-sm p-4 flex justify-between items-center">
           <div>
             <h3 className="text-sm text-gray-600">Next reminder</h3>
-            <p className="text-lg font-semibold">20:00</p>
+            <p className="text-lg font-semibold">9:00</p>
           </div>
         </section>
 
