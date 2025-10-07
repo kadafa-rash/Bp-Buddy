@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
 
 const LogReading = () => {
   const [systolic, setSystolic] = useState('');
@@ -8,6 +9,9 @@ const LogReading = () => {
   const [time, setTime] = useState('');
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState('');
+  const [position, setPosition] = useState('');
+  const [timeTaken, setTimeTaken] = useState('');
+
 
 
   useEffect(() => {
@@ -36,19 +40,41 @@ const LogReading = () => {
   }, [systolic, diastolic]);
 
   
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!systolic || !diastolic || !pulse || !date || !time) {
       alert('Please fill in all required fields.');
       return;
     }
 
-    const newReading = { systolic, diastolic, pulse, date, time, notes, status };
-    const existing = JSON.parse(localStorage.getItem('readings')) || [];
+    const { data, error } = await supabase.from('health_metrics').insert([
+      {
+        bp_systolic: parseInt(systolic),
+        bp_diastolic: parseInt(diastolic),
+        pulse_rate: parseInt(pulse),
+        created_at: new Date(`${date}T${time}`),
+        notes,
+        status,
+        position,
+        time_taken: new Date(`${date}T${time}`),
+      },
+    ]);
 
-    localStorage.setItem('readings', JSON.stringify([...existing, newReading]));
-    alert('Reading logged successfully!');
-    
+    if (error) {
+      console.error('Supabase insert error:', error);
+      alert(` Failed to log reading: ${error.message}`);
+    } else {
+      alert(' Reading logged successfully!');
+      
+      setSystolic('');
+      setDiastolic('');
+      setPulse('');
+      setNotes('');
+      setStatus('');
+      setPosition('');
+      setTimeTaken('');
+    }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
@@ -96,7 +122,7 @@ const LogReading = () => {
           </div>
 
           {status && (
-            <div className="text-sm font-medium mt-2 text-blue-600">
+            <div className="text-sm font-medium mt-2 text-yellow-600">
               Status: {status}
             </div>
           )}
@@ -125,6 +151,31 @@ const LogReading = () => {
                 className="w-full mt-1 p-2 border rounded-md text-sm"
               />
             </div>
+          </div>
+        </section>
+
+         <section className="bg-gray-50 p-4 rounded-xl border space-y-2">
+          <h3 className="text-sm font-medium text-blue-600">Additional Info</h3>
+          <div>
+            <label className="text-xs text-gray-600">Position</label>
+            <input
+              type="text"
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              placeholder="e.g. Sitting, Standing..."
+              className="w-full mt-1 p-2 border rounded-md text-sm"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs text-gray-600">Time Taken</label>
+            <input
+              type="text"
+              value={timeTaken}
+              onChange={(e) => setTimeTaken(e.target.value)}
+              placeholder="e.g. Morning, Evening..."
+              className="w-full mt-1 p-2 border rounded-md text-sm"
+            />
           </div>
         </section>
 
