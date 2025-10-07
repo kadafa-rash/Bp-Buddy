@@ -9,14 +9,14 @@ const LogReading = () => {
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState('');
 
-  // Set default date/time on load
+
   useEffect(() => {
     const now = new Date();
     setDate(now.toISOString().split('T')[0]);
     setTime(now.toTimeString().slice(0, 5));
   }, []);
 
-  // Calculate BP status
+  
   useEffect(() => {
     if (!systolic || !diastolic) {
       setStatus('');
@@ -35,7 +35,7 @@ const LogReading = () => {
     else setStatus('Uncategorized');
   }, [systolic, diastolic]);
 
-  // Handle Save
+  
   const handleSubmit = () => {
     if (!systolic || !diastolic || !pulse || !date || !time) {
       alert('Please fill in all required fields.');
@@ -47,17 +47,17 @@ const LogReading = () => {
 
     localStorage.setItem('readings', JSON.stringify([...existing, newReading]));
     alert('Reading logged successfully!');
-    // Optionally reset fields or navigate away
+    
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       <div className="bg-white rounded-3xl shadow-lg w-full max-w-md p-6 space-y-6">
 
-        {/* Header */}
-        <h2 className="text-xl font-semibold text-gray-800">📋 Log New Reading</h2>
+    
+        <h2 className="text-xl font-semibold text-gray-800">Log New Reading</h2>
 
-        {/* Blood Pressure Input */}
+        
         <section className="bg-gray-50 p-4 rounded-xl border space-y-4">
           <h3 className="text-sm font-medium text-blue-600">Blood Pressure Reading</h3>
 
@@ -102,9 +102,9 @@ const LogReading = () => {
           )}
         </section>
 
-        {/* Date & Time */}
+      
         <section className="bg-gray-50 p-4 rounded-xl border space-y-2">
-          <h3 className="text-sm font-medium text-blue-600">📅 Date & Time</h3>
+          <h3 className="text-sm font-medium text-blue-600"> Date & Time</h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -128,9 +128,9 @@ const LogReading = () => {
           </div>
         </section>
 
-        {/* Notes */}
+      
         <section className="bg-gray-50 p-4 rounded-xl border">
-          <h3 className="text-sm font-medium text-blue-600 mb-2">📝 Notes (Optional)</h3>
+          <h3 className="text-sm font-medium text-blue-600 mb-2"> Notes (Optional)</h3>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -140,7 +140,7 @@ const LogReading = () => {
           />
         </section>
 
-        {/* Submit Button */}
+        
         <button
           onClick={handleSubmit}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition"
