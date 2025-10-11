@@ -29,11 +29,19 @@ const LogReading = () => {
 
     const sys = parseInt(systolic);
     const dia = parseInt(diastolic);
-
-    if (sys < 90 || dia < 60) setStatus('Low');
-    else if (sys < 120 && dia < 80) setStatus('Normal');
+    var sstyle = document.getElementById("statusColor");
+    if (sys < 90 || dia < 60) {
+      setStatus('Low');
+      
+    }
+    else if (sys < 120 && dia < 80) {
+      setStatus('Normal');
+    }
     else if (sys < 130 && dia < 80) setStatus('Elevated');
-    else if ((sys < 140) || (dia < 90)) setStatus('High BP - Stage 1');
+    else if ((sys < 140) || (dia < 90)) {
+      setStatus('High BP - Stage 1');
+
+    } 
     else if (sys >= 140 || dia >= 90) setStatus('High BP - Stage 2');
     else if (sys > 180 || dia > 120) setStatus('Hypertensive Crisis');
     else setStatus('Uncategorized');
@@ -122,7 +130,7 @@ const LogReading = () => {
           </div>
 
           {status && (
-            <div className="text-sm font-medium mt-2 text-yellow-600">
+            <div className="text-sm font-medium mt-2 text-yellow-600" id="statusColor">
               Status: {status}
             </div>
           )}
