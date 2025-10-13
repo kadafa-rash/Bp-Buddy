@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 const tips = [
@@ -28,7 +29,9 @@ const tips = [
   },
 ];
 
+
 const HealthTips = () => {
+  const navigate = useNavigate(); 
   const [tip, setTip] = useState(tips[0]);
 
   const shuffleTip = () => {
@@ -36,14 +39,21 @@ const HealthTips = () => {
     setTip(tips[randomIndex]);
   };
 
-
   useEffect(() => {
     const interval = setInterval(shuffleTip, 10000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="p-4">
+   <div className="p-4 pb-16">
+    
+      <button
+       onClick={() => navigate("/")}
+        className="flex items-center text-gray-800 hover:text-gray-800 mb-4"
+      >
+        ← Back
+      </button>
+    
       <h2 className="text-lg font-semibold mb-3">Health Tips</h2>
 
     
@@ -54,7 +64,7 @@ const HealthTips = () => {
                    </button>
         </div>
         <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-          🥬 {tip.title}
+           {tip.title}
           <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
             {tip.category}
           </span>
@@ -68,7 +78,7 @@ const HealthTips = () => {
         {tips.map((t, i) => (
           <div key={i} className="border rounded-lg p-3 bg-white shadow-sm">
             <h4 className="font-medium flex items-center gap-2">
-              🍏 {t.title}
+               {t.title}
               <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
                 {t.category}
               </span>
