@@ -1,15 +1,23 @@
 import React, { useState } from "react";
 
-const LoginModal = ({ onClose, onLogin }) => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
 
-  const handleLogin = () => {
-    localStorage.setItem("user", JSON.stringify({ name, email }));
+const LoginModal = ({ onClose, onLogin }) => {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = () => {
+    if (isSignUp && !name) {
+      alert("Please enter your name to sign up.");
+      return;
+    }
+
+    const userData = { email, name: name || "User" };
+    localStorage.setItem("user", JSON.stringify(userData));
+
     onLogin();
     onClose();
-  };
-
+  }
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl shadow-lg w-80 p-6 space-y-4">
