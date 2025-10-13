@@ -19,10 +19,12 @@ function App() {
       
      <div className="pb-16">
   <Routes>
+    
     <Route path="/" element={<Dashboard />} />
     <Route path="/history" element={<History />} />
     <Route path="/log" element={<LogReading />} />
     <Route path="/healthtips" element={<HealthTips />} />
+    
   </Routes>
 </div>
 
