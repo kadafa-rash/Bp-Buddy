@@ -1,34 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 
-
-const tips = [
-  {
-    title: "Eat Potassium-Rich Foods",
-    category: "Diet",
-    description:
-      "Include bananas, oranges, spinach, and sweet potatoes in your diet. Potassium helps balance the effects of sodium on blood pressure.",
-  },
-  {
-    title: "Reduce Sodium Intake",
-    category: "Diet",
-    description:
-      "Limit sodium to less than 2,300mg per day. Read food labels and choose low-sodium options.",
-  },
-  {
-    title: "Exercise Regularly",
-    category: "Exercise",
-    description:
-      "Aim for at least 30 minutes of moderate activity daily to strengthen your heart and manage blood pressure.",
-  },
-  {
-    title: "Sleep Well",
-    category: "Lifestyle",
-    description:
-      "Ensure you get 7–8 hours of quality sleep each night to maintain overall cardiovascular health.",
-  },
-];
-
+   const htips = await supabase.from('healthtips').select();
+const tips = htips.data;
 
 const HealthTips = () => {
   const navigate = useNavigate(); 
@@ -82,12 +57,12 @@ const HealthTips = () => {
         {tips.map((t, i) => (
           <div key={i} className="border rounded-lg p-3 bg-white shadow-sm">
             <h4 className="font-medium flex items-center gap-2">
-               {t.title}
+               {t.tip_title}
               <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                {t.category}
+                {t.tip_type}
               </span>
             </h4>
-            <p className="text-sm text-gray-600 mt-1">{t.description}</p>
+            <p className="text-sm text-gray-600 mt-1">{t.tip_description}</p>
           </div>
         ))}
       </div>

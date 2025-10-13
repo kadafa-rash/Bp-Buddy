@@ -40,7 +40,7 @@ const LoginModal = ({ onClose, onLogin }) => {
         />
 
         <button
-          onClick={handleLogin}
+          onClick={handleSubmit}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md text-sm"
         >
           Continue
