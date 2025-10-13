@@ -60,8 +60,12 @@ const HealthTips = () => {
       <div className="border border-yellow-400 bg-yellow-50 p-4 rounded-xl shadow-sm">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm text-yellow-600 font-medium">💡 Tip of the Day</span>
-          <button onClick={shuffleTip} className="text-gray-500 hover:text-gray-700">
-                   </button>
+          <button
+            onClick={shuffleTip}
+            className="text-sm text-black-800 hover:underline"
+          >
+            🔄 Shuffle Tip
+          </button>
         </div>
         <h3 className="font-semibold text-gray-800 flex items-center gap-2">
            {tip.title}
