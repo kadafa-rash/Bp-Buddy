@@ -5,6 +5,7 @@ import { supabase } from "../supabaseClient";
    const htips = await supabase.from('healthtips').select();
 const tips = htips.data;
 
+
 const HealthTips = () => {
   const navigate = useNavigate(); 
   const [tip, setTip] = useState(tips[0]);
@@ -43,12 +44,12 @@ const HealthTips = () => {
           </button>
         </div>
         <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-           {tip.title}
+           {tip.tip_title}
           <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-            {tip.category}
+            {tip.tip_type}
           </span>
         </h3>
-        <p className="text-sm text-gray-600 mt-2">{tip.description}</p>
+        <p className="text-sm text-gray-600 mt-2">{tip.tip_description}</p>
       </div>
 
     
