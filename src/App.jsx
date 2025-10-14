@@ -4,7 +4,7 @@ import History from './components/History';
 import LogReading from './components/LogReading';
 import HealthTips  from './components/HealthTips';
 import LandingPage from './components/LandingPage';
-
+import Trends from './components/Trends';
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
     <Route path="/history" element={<History />} />
     <Route path="/log" element={<LogReading />} />
     <Route path="/healthtips" element={<HealthTips />} />
-    
+    <Route path="/trends" element={<Trends />} />
   </Routes>
 </div>
 
