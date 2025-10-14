@@ -12,6 +12,10 @@ const LandingPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+     if (!firstName || !lastName || !age) {
+    alert('Please fill in all fields ');
+    return;
+  }
     navigate('/dashboard'); 
   };
 
