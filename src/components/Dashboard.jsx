@@ -1,34 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginModal from "./LoginModal";
 
-
-
-  const Dashboard = () => {
+const Dashboard = () => {
   const navigate = useNavigate();
-  const [showLogin, setShowLogin] = useState(false);
 
   const handleLogReadingClick = () => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      navigate("/log");
-    } else {
-      setShowLogin(true);
-    }
-  };
-
-  const handleLoginSuccess = () => {
     navigate("/log");
   };
 
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-6">
-      {showLogin && (
-        <LoginModal
-          onClose={() => setShowLogin(false)}
-          onLogin={handleLoginSuccess}
-        />
-      )}
+      
 
       <div className="bg-white rounded-3xl shadow-md w-full max-w-7xl mx-auto p-6 sm:p-8 space-y-8">
 
@@ -70,7 +52,7 @@ import LoginModal from "./LoginModal";
 
         
         <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">
-          <button
+           <button
             onClick={handleLogReadingClick}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-sm sm:text-base font-medium transition"
           >
