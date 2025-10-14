@@ -1,13 +1,23 @@
 import { useState } from "react"; 
+import { useNavigate } from "react-router-dom";
 
 const Trends = () => {
   const [activeTab, setActiveTab] = useState("Month");
+  const navigate = useNavigate();
 
   const tabs = ["Week", "Month", "All Time"];
+
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-4 space-y-4">
      
+     <button
+      onClick={() => navigate('/dashboard')}
+      className="flex items-center text-gray-800 hover:text-gray-800 mb-4"
+    >
+      ← Back
+    </button>
+  
       <div className="text-xl font-semibold">Trends</div>
 
      
@@ -68,17 +78,7 @@ const Trends = () => {
       </div>
     
   );
-};
+ };
 
-const LegendItem = ({ color, label, dashed = false }) => (
-  <li className="flex items-center space-x-2">
-    <div
-      className={`w-4 h-0.5 ${
-        dashed ? "border-t-2 border-dashed" : ""
-      } bg-${color} ${dashed ? "" : "rounded-full"}`}
-    />
-    <span>{label}</span>
-  </li>
-);
 
 export default Trends;

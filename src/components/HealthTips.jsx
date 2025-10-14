@@ -24,7 +24,7 @@ const HealthTips = () => {
    <div className="p-4 pb-16">
     
       <button
-       onClick={() => navigate(-1)}
+       onClick={() => navigate('/dashboard')}
         className="flex items-center text-gray-800 hover:text-gray-800 mb-4"
       >
         ← Back
