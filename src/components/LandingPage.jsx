@@ -117,6 +117,15 @@ const LandingPage = () => {
     />
   </div>
 
+<div>
+      <label className="block mb-1 text-sm font-medium">Password</label>
+      <input
+      type="password"
+      placeholder="Enter your password"
+      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+     />
+ </div>
+
           <button
             type="submit"
             className="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition"
