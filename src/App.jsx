@@ -27,7 +27,7 @@ function App() {
       
      <div className="pb-16">
   <Routes>
-    
+    <Route path="/" element={<LandingPage />} />
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/history" element={<History />} />
     <Route path="/log" element={<LogReading />} />

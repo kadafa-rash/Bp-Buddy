@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
+  const navigate = useNavigate(); 
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [age, setAge] = useState('');
   const [mode, setMode] = useState('signin');
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/dashboard'); 
+  };
+
 
   const features = [
     {
@@ -28,7 +41,7 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-blue-50 text-gray-800">
-      {/* Header */}
+    
       <header className="text-center py-12">
         <div className="flex justify-center items-center gap-2 mb-2">
           <div className="text-blue-600 text-3xl">📈</div>
@@ -39,7 +52,7 @@ const LandingPage = () => {
         </p>
       </header>
 
-      {/* Why Choose Section */}
+    
       <section className="max-w-4xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-semibold mb-6 text-center">Why Choose BP Buddy?</h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -75,24 +88,34 @@ const LandingPage = () => {
           </button>
         </div>
 
-        <form className="space-y-4">
-          <div>
-            <label className="block mb-1 text-sm font-medium">Email</label>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
 
-          <div>
-            <label className="block mb-1 text-sm font-medium">Password</label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
+  <div>
+    <label className="block mb-1 text-sm font-medium">First Name</label>
+    <input
+      type="text"
+      placeholder="John"
+      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+  </div>
+
+  <div>
+    <label className="block mb-1 text-sm font-medium">Last Name</label>
+    <input
+      type="text"
+      placeholder="Doe"
+      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+  </div>
+
+  <div>
+    <label className="block mb-1 text-sm font-medium">Age</label>
+    <input
+      type="number"
+      placeholder="30"
+      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+  </div>
 
           <button
             type="submit"
