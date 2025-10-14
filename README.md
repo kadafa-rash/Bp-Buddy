@@ -1,16 +1,57 @@
-# React + Vite
+# 🩺 BP Buddy – A Blood Pressure Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**BP Buddy** is a web application that allows users to track, visualize, and analyze their blood pressure readings over time. With a clean UI, cloud sync via Supabase, and health insights, it empowers users to take better control of their heart health.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Features
 
-## React Compiler
+| Feature | Description |
+|--------|-------------|
+| ✅ Add Reading | Input date, systolic, diastolic, and pulse |
+| ✅ Validate Reading | Get immediate classification: Low, Normal, Elevated, or High |
+| 📊 Chart View | Visualize weekly/monthly trends with Chart.js or Recharts |
+| 🔁 Reminder System | (Optional) Browser-based reminders to log your BP |
+| 🧠 Health Tips | Static or API-fetched tips for better BP control |
+| 🔐 Supabase Auth | Secure login and user-specific data storage |
+| ☁️ Cloud Sync | Supabase as backend for realtime reading storage |
+| 📝 Notes | Add daily notes alongside each BP entry |
+| 📅 Calendar View | (Optional) See readings in a calendar format |
+| 📱 Responsive Design | Optimized for mobile and desktop use |
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🧰 Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend:
+- [React.js](https://reactjs.org/)
+- [TailwindCSS](https://tailwindcss.com/) *(optional, or use CSS/SCSS)*
+- [Chart.js](https://www.chartjs.org/) or [Recharts](https://recharts.org/)
+
+### Backend:
+- [Supabase](https://supabase.io/) – Authentication & Postgres Database
+
+---
+
+## 🖼️ Pages Overview
+
+| Page | Description |
+|------|-------------|
+| **Home** | Summary of today’s reading + quick tips |
+| **Add Reading** | Form to input blood pressure and pulse |
+| **History** | List view of all past entries |
+| **Graph** | Weekly/monthly chart of readings |
+| **Tips** | Health tips fetched from API or static list |
+| **Settings** | Toggle reminders, dark mode, etc. |
+
+---
+
+## 🧠 Blood Pressure Classification
+
+```js
+function classifyBP(systolic, diastolic) {
+  if (systolic < 90 || diastolic < 60) return "Low";
+  if (systolic <= 120 && diastolic <= 80) return "Normal";
+  if (systolic <= 140 || diastolic <= 90) return "Elevated";
+  return "High";
+}
