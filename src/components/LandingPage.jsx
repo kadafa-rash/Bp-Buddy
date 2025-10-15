@@ -1,52 +1,97 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import useUserStore from '../store/userStore';
 
-  const LandingPage = ({ setUserProfile }) => {
+export const userFormSchema = Yup.object({
+  firstName: Yup.string().required('First name is required'),
+  lastName: Yup.string().required('Last name is required'),
+  age: Yup.number()
+    .required('Age is required')
+    .min(1, 'Age must be at least 1')
+    .max(120, 'Age must be realistic'),
+  password: Yup.string().required('Password is required'),
+});
+
+const LandingPage = () => {
   const navigate = useNavigate();
+  const firstName = useUserStore((state) => state.firstName);
+  const setFirstNameInStore = useUserStore((state) => state.setFirstName);
+  const setLastNameInStore = useUserStore((state) => state.setLastName);
 
-
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [age, setAge] = useState('');
   const [mode, setMode] = useState('signin');
 
+  // Formik setup
+  const formik = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      age: '',
+      password: '',
+    },
+    validationSchema: userFormSchema,
+    onSubmit: (values) => {
+      const { firstName, lastName, age, password } = values;
+      const userKey = `${firstName.toLowerCase()}_${lastName.toLowerCase()}`;
+      const userData = { firstName, lastName, age, password };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-     if (!firstName || !lastName || !age) {
-    alert('Please fill in all fields ');
-    return;
-  }
-   navigate('/dashboard'); 
-  };
+      if (mode === 'signup') {
+        localStorage.setItem(userKey, JSON.stringify(userData));
+        setFirstNameInStore(firstName);
+        setLastNameInStore(lastName);
+        alert('Signup successful! You can now sign in.');
+        setMode('signin');
+      } else {
+        const storedUser = localStorage.getItem(userKey);
+        if (!storedUser) {
+          alert('User not found. Please sign up first.');
+          return;
+        }
 
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser.password !== password) {
+          alert('Incorrect password.');
+          return;
+        }
+
+        // Save to Zustand
+        setFirstNameInStore(parsedUser.firstName);
+        setLastNameInStore(parsedUser.lastName);
+
+        navigate('/dashboard');
+      }
+    },
+  });
 
   const features = [
     {
-      title: "Easy Tracking",
-      description: "Log your blood pressure readings with smart validation and instant feedback.",
-      icon: "💙",
+      title: 'Easy Tracking',
+      description:
+        'Log your blood pressure readings with smart validation and instant feedback.',
+      icon: '💙',
     },
     {
-      title: "Visual Trends",
-      description: "Interactive charts help you understand your health patterns over time.",
-      icon: "📊",
+      title: 'Visual Trends',
+      description: 'Interactive charts help you understand your health patterns over time.',
+      icon: '📊',
     },
     {
-      title: "Health Insights",
-      description: "Get personalized tips and insights to improve your cardiovascular health.",
-      icon: "🔍",
+      title: 'Health Insights',
+      description: 'Get personalized tips and insights to improve your cardiovascular health.',
+      icon: '🔍',
     },
     {
-      title: "Privacy First",
-      description: "Your health data is encrypted and secure. You maintain full control.",
-      icon: "🛡️",
+      title: 'Privacy First',
+      description: 'Your health data is encrypted and secure. You maintain full control.',
+      icon: '🛡️',
     },
   ];
 
   return (
+   
     <div className="min-h-screen bg-blue-50 text-gray-800">
-    
+         
       <header className="text-center py-12">
         <div className="flex justify-center items-center gap-2 mb-2">
           <div className="text-blue-600 text-3xl">📈</div>
@@ -57,15 +102,11 @@ import { useNavigate } from 'react-router-dom';
         </p>
       </header>
 
-    
       <section className="max-w-4xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-semibold mb-6 text-center">Why Choose BP Buddy?</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {features.map((feat, idx) => (
-            <div
-              key={idx}
-              className="bg-white p-6 rounded-lg shadow-sm flex items-start gap-4"
-            >
+            <div key={idx} className="bg-white p-6 rounded-lg shadow-sm flex items-start gap-4">
               <div className="text-3xl">{feat.icon}</div>
               <div>
                 <h3 className="font-semibold text-lg">{feat.title}</h3>
@@ -76,7 +117,6 @@ import { useNavigate } from 'react-router-dom';
         </div>
       </section>
 
-    
       <section className="bg-white max-w-md mx-auto my-12 p-8 rounded-lg shadow-md">
         <div className="flex justify-center mb-6">
           <button
@@ -93,46 +133,73 @@ import { useNavigate } from 'react-router-dom';
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={formik.handleSubmit} className="space-y-4">
+          {/* First Name */}
+          <div>
+            <label className="block mb-1 text-sm font-medium">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="John"
+              value={formik.values.firstName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            {formik.touched.firstName && formik.errors.firstName && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.firstName}</div>
+            )}
+          </div>
 
-  <div>
-    <label className="block mb-1 text-sm font-medium">First Name</label>
-    <input
-      type="text"
-      placeholder="John"
-      onChange={(e) => setFirstName(e.target.value)}
-      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
-  </div>
+          {/* Last Name */}
+          <div>
+            <label className="block mb-1 text-sm font-medium">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Doe"
+              value={formik.values.lastName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            {formik.touched.lastName && formik.errors.lastName && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.lastName}</div>
+            )}
+          </div>
 
-  <div>
-    <label className="block mb-1 text-sm font-medium">Last Name</label>
-    <input
-      type="text"
-      placeholder="Doe"
-      onChange={(e) => setLastName(e.target.value)}
-      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
-  </div>
+          {/* Age */}
+          <div>
+            <label className="block mb-1 text-sm font-medium">Age</label>
+            <input
+              type="number"
+              name="age"
+              placeholder="30"
+              value={formik.values.age}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            {formik.touched.age && formik.errors.age && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.age}</div>
+            )}
+          </div>
 
-  <div>
-    <label className="block mb-1 text-sm font-medium">Age</label>
-    <input
-      type="number"
-      placeholder="30"
-      onChange={(e) => setAge(e.target.value)}
-      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
-  </div>
-
-<div>
-      <label className="block mb-1 text-sm font-medium">Password</label>
-      <input
-      type="password"
-      placeholder="Enter your password"
-      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-     />
- </div>
+          {/* Password */}
+          <div>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            {formik.touched.password && formik.errors.password && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors.password}</div>
+            )}
+          </div>
 
           <button
             type="submit"

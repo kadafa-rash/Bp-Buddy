@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../store/userStore";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const firstName = useUserStore((state) => state.firstName);
+  const lastName = useUserStore((state) => state.lastName);
 
   const handleLogReadingClick = () => {
     navigate("/log");
@@ -17,6 +20,9 @@ const Dashboard = () => {
        
         <div className="text-center md:text-left">
           <h1 className="text-3xl font-bold text-blue-600">BP Buddy</h1>
+          <div>
+            <h1>Welcome{firstName ? `, ${firstName}` : ''} {lastName ? `, ${lastName}` : ''}!</h1>
+          </div>
           <p className="text-base text-gray-500">Your Blood Pressure Companion</p>
         </div>
 
