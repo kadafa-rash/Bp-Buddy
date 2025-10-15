@@ -20,9 +20,6 @@ const Dashboard = () => {
        
         <div className="text-center md:text-left">
           <h1 className="text-3xl font-bold text-blue-600">BP Buddy</h1>
-          <div>
-            <h1>Welcome{firstName ? `, ${firstName}` : ''} {lastName ? `, ${lastName}` : ''}!</h1>
-          </div>
           <p className="text-base text-gray-500">Your Blood Pressure Companion</p>
         </div>
 

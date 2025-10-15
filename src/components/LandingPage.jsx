@@ -19,10 +19,11 @@ const LandingPage = () => {
   const firstName = useUserStore((state) => state.firstName);
   const setFirstNameInStore = useUserStore((state) => state.setFirstName);
   const setLastNameInStore = useUserStore((state) => state.setLastName);
+  const setAgeInStore = useUserStore((state) => state.setAge);
 
   const [mode, setMode] = useState('signin');
 
-  // Formik setup
+
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -40,6 +41,7 @@ const LandingPage = () => {
         localStorage.setItem(userKey, JSON.stringify(userData));
         setFirstNameInStore(firstName);
         setLastNameInStore(lastName);
+        setAgeInStore(age)
         alert('Signup successful! You can now sign in.');
         setMode('signin');
       } else {
@@ -55,7 +57,7 @@ const LandingPage = () => {
           return;
         }
 
-        // Save to Zustand
+    
         setFirstNameInStore(parsedUser.firstName);
         setLastNameInStore(parsedUser.lastName);
 
