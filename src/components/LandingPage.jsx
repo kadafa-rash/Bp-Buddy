@@ -99,6 +99,7 @@ const LandingPage = () => {
     <input
       type="text"
       placeholder="John"
+      onChange={(e) => setFirstName(e.target.value)}
       className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
     />
   </div>
@@ -108,6 +109,7 @@ const LandingPage = () => {
     <input
       type="text"
       placeholder="Doe"
+      onChange={(e) => setLastName(e.target.value)}
       className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
     />
   </div>
@@ -117,6 +119,7 @@ const LandingPage = () => {
     <input
       type="number"
       placeholder="30"
+      onChange={(e) => setAge(e.target.value)}
       className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
     />
   </div>
