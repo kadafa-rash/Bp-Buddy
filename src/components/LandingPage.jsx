@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
 
-const LandingPage = () => {
-  const navigate = useNavigate(); 
+  const LandingPage = ({ setUserProfile }) => {
+  const navigate = useNavigate();
+
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -16,7 +17,7 @@ const LandingPage = () => {
     alert('Please fill in all fields ');
     return;
   }
-    navigate('/dashboard'); 
+   navigate('/dashboard'); 
   };
 
 
