@@ -12,6 +12,10 @@ const History = () => {
 
       
         <section className="bg-gray-50 p-4 sm:p-6 rounded-xl border shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex items-center justify-center space-x-2 p-4 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-md animate-pulse">
+          <span> This feature is under development.</span>
+          </div>
+
           <div>
             <h3 className="text-sm font-medium text-gray-600 mb-2"> Filter Readings</h3>
 
@@ -42,7 +46,7 @@ const History = () => {
             <div className="text-sm text-gray-500">
               <p className="mb-2">0 of 0 readings</p>
               <button className="border px-4 py-2 rounded-md text-gray-600 hover:bg-gray-100 transition">
-                 Export CSV
+                📁 Export PDF
               </button>
             </div>
           </div>

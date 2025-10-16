@@ -68,9 +68,6 @@ const Dashboard = () => {
              View Trends
           </button>
         </div>
-
-        
-        
       </div>
     </div>
   );

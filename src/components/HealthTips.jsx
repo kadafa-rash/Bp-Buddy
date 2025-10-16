@@ -38,9 +38,9 @@ const HealthTips = () => {
           <span className="text-sm text-yellow-600 font-medium">💡 Tip of the Day</span>
           <button
             onClick={shuffleTip}
-            className="text-sm text-black-800 hover:underline"
+            className="text-sm text-black-800 "
           >
-            🔄 Shuffle Tip
+            🔄
           </button>
         </div>
         <h3 className="font-semibold text-gray-800 flex items-center gap-2">

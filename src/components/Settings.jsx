@@ -46,7 +46,7 @@ const setFirstNameInStore = useUserStore((state) => state.setFirstName);
 
         <button
           onClick={handleSignOut}
-          className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border rounded-md text-sm font-medium"
+          className="px-4 py-2 bg-red-500 text-white p-4 border rounded-md text-sm font-medium"
         >
           <span className="inline-block mr-2"></span> Sign Out
         </button>
