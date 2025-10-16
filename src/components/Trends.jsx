@@ -12,7 +12,9 @@ const Trends = () => {
     <div className="px-4 sm:px-6 lg:px-8 py-4">
     <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-4 space-y-4">
 
-     
+     <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4">
+      <p className="font-medium">⚠️ This page is still under development...</p>
+    </div>
      <button
       onClick={() => navigate('/dashboard')}
       className="flex items-center text-gray-800 hover:text-gray-800 mb-4"
