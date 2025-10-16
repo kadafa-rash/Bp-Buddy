@@ -31,7 +31,30 @@ const Settings = () => {
           <span className="inline-block mr-2"></span> Sign Out
         </button>
       </div>
+      <div className="border rounded-lg p-6 mb-6">
+  <h3 className="text-lg font-medium mb-4 flex items-center gap-2">
+    <span className="text-xl"></span> About BP Buddy
+  </h3>
+  <p className="text-sm text-gray-700 mb-2">
+    <strong>Version:</strong> 1.0.0
+  </p>
+  <p className="text-sm text-gray-700 mb-4">
+    <strong>Purpose:</strong> Blood Pressure Tracking & Health Monitoring
+  </p>
+  <p className="text-sm text-gray-600 mb-4">
+    BP Buddy helps you track your blood pressure readings, monitor trends, and maintain better cardiovascular health through consistent monitoring and helpful tips.
+  </p>
+
+  <div className="bg-gray-50 border-l-4 border-blue-400 p-4 rounded-md">
+    <h4 className="text-sm font-semibold text-blue-800 mb-1">🔒 Privacy & Data Security</h4>
+    <p className="text-sm text-gray-700">
+      All your health data is stored <strong>locally</strong> on your device. BP Buddy does not collect, transmit, or store your personal health information on external servers. Your privacy and data security are our top priorities.
+    </p>
+  </div>
+</div>
+
     </div>
+    
   );
 };
 
