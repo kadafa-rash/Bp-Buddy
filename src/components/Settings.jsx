@@ -6,7 +6,24 @@ const Settings = () => {
   const firstName = useUserStore((state) => state.firstName);
   const lastName = useUserStore((state) => state.lastName);
    const age = useUserStore((state) => state.age);
-   console.log(age);
+   
+const setFirstNameInStore = useUserStore((state) => state.setFirstName);
+  const setLastNameInStore = useUserStore((state) => state.setLastName);
+  const setAgeInStore = useUserStore((state) => state.setAge);
+
+  const userKey = `${firstName.toLowerCase()}_${lastName.toLowerCase()}`;
+
+
+  const handleSignOut = () => {
+    localStorage.removeItem(userKey);
+
+    setFirstNameInStore('');
+    setLastNameInStore('');
+    setAgeInStore('');
+
+    alert('Signed out!');
+  };
+   
   return (
     <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl mx-auto mt-6 sm:mt-10 p-4 sm:p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-xl sm:text-2xl font-semibold mb-6">Settings</h2>
@@ -27,7 +44,10 @@ const Settings = () => {
   <p className="text-base font-medium">{age ? `${age}` : ''}</p>
 </div>
 
-        <button className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border rounded-md text-sm font-medium">
+        <button
+          onClick={handleSignOut}
+          className="px-4 py-2 bg-gray-100 hover:bg-gray-200 border rounded-md text-sm font-medium"
+        >
           <span className="inline-block mr-2"></span> Sign Out
         </button>
       </div>
