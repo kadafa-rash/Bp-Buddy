@@ -54,25 +54,52 @@ const LogReading = () => {
       return;
     }
 
-    const { data, error } = await supabase.from('health_metrics').insert([
-      {
-        bp_systolic: parseInt(systolic),
-        bp_diastolic: parseInt(diastolic),
-        pulse_rate: parseInt(pulse),
-        created_at: new Date(`${date}T${time}`),
-        notes,
-        status,
-        position,
-        time_taken: new Date(`${date}T${time}`),
-      },
-    ]);
-
-    if (error) {
-      console.error('Supabase insert error:', error);
-      alert(` Failed to log reading: ${error.message}`);
-    } else {
-      alert(' Reading logged successfully!');
+    try {
       
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError) throw userError;
+      if (!user) {
+        alert('No user signed in. Please log in.');
+        return;
+      }
+
+      
+      const { data: existingPatient } = await supabase
+        .from('patient_info')
+        .select('id')
+        .eq('id', user.id)
+        .single();
+
+      if (!existingPatient) {
+        const { error: insertPatientError } = await supabase.from('patient_info').insert([
+          { id: user.id,
+          first_name : user.user_metadata?.firstName || '',
+          last_name: user.user_metadata?.lastName || '',
+          created_at: new Date(),
+          age: user.user_metadata?.age || 0,
+        },
+        ]);
+
+        if (insertPatientError) throw insertPatientError;
+      }
+
+      const { error } = await supabase.from('health_metrics').insert([
+        {
+          patient_id: user.id,
+          bp_systolic: parseInt(systolic),
+          bp_diastolic: parseInt(diastolic),
+          pulse_rate: parseInt(pulse),
+          created_at: new Date(`${date}T${time}`),
+          notes,
+          status,
+          position,
+          time_taken: timeTaken || null,
+        },
+      ]);
+
+      if (error) throw error;
+
+      alert('Reading logged successfully!');
       setSystolic('');
       setDiastolic('');
       setPulse('');
@@ -80,9 +107,12 @@ const LogReading = () => {
       setStatus('');
       setPosition('');
       setTimeTaken('');
+
+    } catch (err) {
+      console.error('Error logging reading:', err);
+      alert(`Failed to log reading: ${err.message}`);
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">

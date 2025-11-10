@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import useUserStore from '../store/userStore';
+import { supabase } from '../supabaseClient'; 
 
 export const userFormSchema = Yup.object({
   firstName: Yup.string().required('First name is required'),
@@ -11,96 +11,77 @@ export const userFormSchema = Yup.object({
     .required('Age is required')
     .min(1, 'Age must be at least 1')
     .max(120, 'Age must be realistic'),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
   password: Yup.string().required('Password is required'),
 });
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const firstName = useUserStore((state) => state.firstName);
-  const setFirstNameInStore = useUserStore((state) => state.setFirstName);
-  const setLastNameInStore = useUserStore((state) => state.setLastName);
-  const setAgeInStore = useUserStore((state) => state.setAge);
-
   const [mode, setMode] = useState('signin');
-
 
   const formik = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
       age: '',
+      email: '',
       password: '',
     },
     validationSchema: userFormSchema,
-    onSubmit: (values) => {
-      const { firstName, lastName, age, password } = values;
-      const userKey = `${firstName.toLowerCase()}_${lastName.toLowerCase()}`;
-      const userData = { firstName, lastName, age, password };
+    onSubmit: async (values) => {
+      const { firstName, lastName, age, email, password } = values;
 
-      if (mode === 'signup') {
-        localStorage.setItem(userKey, JSON.stringify(userData));
-        setFirstNameInStore(firstName);
-        setLastNameInStore(lastName);
-        setAgeInStore(age)
-        alert('Signup successful! You can now sign in.');
-        setMode('signin');
-      } else {
-        const storedUser = localStorage.getItem(userKey);
-        if (!storedUser) {
-          alert('User not found. Please sign up first.');
-          return;
+      try {
+        if (mode === 'signup') {
+          
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { firstName, lastName, age }, 
+            },
+          });
+
+          if (error) throw error;
+
+          alert(' Signup successful! Please check your email to confirm and then sign in.');
+          setMode('signin');
+
+        } else {
+          
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+          if (error) throw error;
+
+          alert('✅ Signed in successfully!');
+          navigate('/dashboard');
         }
-
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser.password !== password) {
-          alert('Incorrect password.');
-          return;
-        }
-
-    
-        setFirstNameInStore(parsedUser.firstName);
-        setLastNameInStore(parsedUser.lastName);
-
-        navigate('/dashboard');
+      } catch (err) {
+        alert(`❌ ${err.message}`);
+        console.error('Auth error:', err.message);
       }
     },
   });
 
   const features = [
-    {
-      title: 'Easy Tracking',
-      description:
-        'Log your blood pressure readings with smart validation and instant feedback.',
-      icon: '💙',
-    },
-    {
-      title: 'Visual Trends',
-      description: 'Interactive charts help you understand your health patterns over time.',
-      icon: '📊',
-    },
-    {
-      title: 'Health Insights',
-      description: 'Get personalized tips and insights to improve your cardiovascular health.',
-      icon: '🔍',
-    },
-    {
-      title: 'Privacy First',
-      description: 'Your health data is encrypted and secure. You maintain full control.',
-      icon: '🛡️',
-    },
+    { title: 'Easy Tracking', description: 'Log your blood pressure readings easily.', icon: '💙' },
+    { title: 'Visual Trends', description: 'Charts help you understand your health patterns.', icon: '📊' },
+    { title: 'Health Insights', description: 'Get personalized tips to improve your health.', icon: '🔍' },
+    { title: 'Privacy First', description: 'Your data is secure and encrypted.', icon: '🛡️' },
   ];
 
   return (
-   
     <div className="min-h-screen bg-blue-50 text-gray-800">
-         
       <header className="text-center py-12">
         <div className="flex justify-center items-center gap-2 mb-2">
           <div className="text-blue-600 text-3xl">📈</div>
           <h1 className="text-4xl font-bold text-blue-700">BP Buddy</h1>
         </div>
         <p className="text-lg max-w-xl mx-auto">
-          Your comprehensive blood pressure companion. Track, monitor, and maintain better cardiovascular health.
+          Track, monitor, and maintain your cardiovascular health.
         </p>
       </header>
 
@@ -136,13 +117,11 @@ const LandingPage = () => {
         </div>
 
         <form onSubmit={formik.handleSubmit} className="space-y-4">
-          {/* First Name */}
           <div>
             <label className="block mb-1 text-sm font-medium">First Name</label>
             <input
               type="text"
               name="firstName"
-              placeholder="John"
               value={formik.values.firstName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -153,13 +132,11 @@ const LandingPage = () => {
             )}
           </div>
 
-          {/* Last Name */}
           <div>
             <label className="block mb-1 text-sm font-medium">Last Name</label>
             <input
               type="text"
               name="lastName"
-              placeholder="Doe"
               value={formik.values.lastName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -170,13 +147,11 @@ const LandingPage = () => {
             )}
           </div>
 
-          {/* Age */}
           <div>
             <label className="block mb-1 text-sm font-medium">Age</label>
             <input
               type="number"
               name="age"
-              placeholder="30"
               value={formik.values.age}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -187,12 +162,26 @@ const LandingPage = () => {
             )}
           </div>
 
-          {/* Password */}
           <div>
+            <label className="block text-sm text-gray-600">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="w-full mt-1 p-2 border rounded-md text-sm"
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className="text-red-500 text-xs">{formik.errors.email}</div>
+            )}
+          </div>
+
+          <div>
+            <label className="block mb-1 text-sm font-medium">Password</label>
             <input
               type="password"
               name="password"
-              placeholder="Enter your password"
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

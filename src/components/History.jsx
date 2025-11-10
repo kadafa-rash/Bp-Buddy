@@ -1,33 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient'; 
+
 const History = () => {
   const [readings, setReadings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [statuses, setStatuses] = useState([]);
+
+  
   const fetchReadings = async () => {
     setLoading(true);
 
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    if (userError) {
+      console.error('Error fetching user:', userError);
+      setLoading(false);
+      return;
+    }
+
+    if (!user) {
+      console.warn('⚠️ No logged-in user found.');
+      setReadings([]);
+      setLoading(false);
+      return;
+    }
+
+    
     let query = supabase
       .from('health_metrics')
       .select('id, created_at, bp_systolic, bp_diastolic, pulse_rate, weight_kg, position, status')
+      .eq('patient_id', user.id) 
       .order('created_at', { ascending: false });
 
     if (selectedStatus !== 'All') {
       query = query.eq('status', selectedStatus);
     }
+
     const { data, error } = await query;
+
     if (error) {
       console.error('Error fetching readings:', error);
     } else {
       setReadings(data);
     }
+
     setLoading(false);
   };
+
+  
   const fetchStatuses = async () => {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) return;
+
     const { data, error } = await supabase
       .from('health_metrics')
-      .select('status');
+      .select('status')
+      .eq('patient_id', user.id);
+
     if (error) {
       console.error('Error fetching statuses:', error);
     } else {
@@ -36,18 +66,23 @@ const History = () => {
     }
   };
 
+  
   useEffect(() => {
     fetchStatuses();
   }, []);
+
+  
   useEffect(() => {
     fetchReadings();
   }, [selectedStatus]);
+
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6 md:p-10">
       <div className="bg-white rounded-3xl shadow-lg w-full h-full p-6 sm:p-8 space-y-6">
         <header className="text-center md:text-left">
           <h2 className="text-2xl sm:text-3xl font-semibold text-gray-800">History</h2>
         </header>
+
         <section className="bg-gray-50 p-4 sm:p-6 rounded-xl border shadow-sm space-y-4">
           <div>
             <label className="block text-sm text-gray-600 mb-1">Filter by Status</label>
@@ -64,6 +99,7 @@ const History = () => {
             </select>
           </div>
         </section>
+
         <section className="bg-gray-50 p-6 rounded-xl border">
           {loading ? (
             <div className="text-center text-gray-400">Loading...</div>
@@ -96,8 +132,8 @@ const History = () => {
                       <td className="px-4 py-2">{reading.bp_systolic}</td>
                       <td className="px-4 py-2">{reading.bp_diastolic}</td>
                       <td className="px-4 py-2">{reading.pulse_rate}</td>
-                      <td className="px-4 py-2">{reading.weight_kg}</td>
-                      <td className="px-4 py-2">{reading.position}</td>
+                      <td className="px-4 py-2">{reading.weight_kg || '-'}</td>
+                      <td className="px-4 py-2">{reading.position || '-'}</td>
                       <td className="px-4 py-2">{reading.status}</td>
                     </tr>
                   ))}
